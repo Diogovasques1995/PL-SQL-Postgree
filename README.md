@@ -72,3 +72,9 @@ Diferenciação de Dialetos: Uso prático de tipos nativos do Postgres como SERI
 Tratamento de Sintaxe Complexa: Resolução de conflitos de DDL e aplicação de constraints de chave via linha de comando isolada.
 
 Abstração de Dados: Separação de privilégios e tabelas através de Namespaces (Schemas).
+
+---
+
+## 📂 Projetos e Extensões
+
+* 📊 **[Acesse aqui a Modelagem Dimensional de Vendas](Dimensionamento)** — Detalhes sobre a estrutura Star Schema, tabelas fato/dimensão e scripts DDL executados no PostgreSQL.
