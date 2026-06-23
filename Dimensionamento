@@ -1,6 +1,6 @@
 # 🐘 PostgreSQL: Modelagem Dimensional & Análise de Vendas
 
-Este projeto demonstra o desenvolvimento de um modelo de banco de dados dimensional utilizando o **PostgreSQL** (via pgAdmin 4 / DBeaver). O cenário simula um ambiente real de Business Intelligence (BI) focado no controle e análise de vendas de produtos eletrônicos (consoles, smartphones e video games), integrando a performance de clientes, lojas e vendedores.
+Este projeto demonstra o desenvolvimento de um modelo de banco de dados dimensional utilizando o **PostgreSQL** (via pgAdmin 4). O cenário simula um ambiente real de Business Intelligence (BI) focado no controle e análise de vendas de produtos eletrônicos (consoles, smartphones e video games), integrando a performance de clientes, lojas e vendedores.
 
 ---
 
@@ -15,6 +15,7 @@ Este projeto demonstra o desenvolvimento de um modelo de banco de dados dimensio
 ## 📐 Arquitetura do Modelo (Star Schema)
 
 O modelo foi desenhado para simplificar e acelerar a extração de relatórios gerenciais, separando o contexto do negócio em tabelas de dimensões claras e uma fato central.
+Detalhe que na hora da criação esqueci de vincular o integer not null references para "id_vendedor" então não mostra no diagrama erro de principiante.
 
 ![Star Schema](Starchema.pgerd.png)  
 *Diagrama gerado via pgAdmin ERD*
@@ -24,7 +25,7 @@ O modelo foi desenhado para simplificar e acelerar a extração de relatórios g
 * **Tabela Fato (`vendas`):** Registra cada evento de venda e concentra as métricas quantificáveis (`valor_unitario`, `quantidade`, `valor_total`), além das chaves estrangeiras (*Foreign Keys*) que apontam para as dimensões.
 * **Tabelas de Dimensão (`cliente`, `produtos`, `lojas`, `vendedor`):** Não guardam métricas. Armazenam exclusivamente atributos descritivos usados para filtrar, contextualizar e agrupar a fato (ex: vendas por estado, tipo de produto ou performance do vendedor).
 * **Dimensão Degenerada (`tipo_operacao`):** O atributo descritivo (compra, troca ou venda) vive diretamente dentro da tabela fato por não possuir atributos adicionais suficientes que justifiquem a criação de uma tabela própria separada.
-
+* **Demiensão Degenerada foi criada sem querer, e descobri revisando o material estudando um pouco os conceitos.
 ---
 
 ## 🛠️ Engenharia e Evolução de Schema (DDL)
