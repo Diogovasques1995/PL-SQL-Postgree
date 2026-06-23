@@ -1,40 +1,38 @@
-# Modelagem Dimensional - Vendas (PostgreSQL)
+# 🐘 PostgreSQL: Modelagem Dimensional & Análise de Vendas
 
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Database Design](https://img.shields.io/badge/Database-Design-orange?style=for-the-badge)
-
-Exercício prático de modelagem dimensional implementado em **PostgreSQL**. O projeto simula um cenário real de vendas de produtos eletrônicos (consoles, smartphones, jogos), estruturando os dados de forma otimizada para consultas analíticas (BI e Data Warehouses).
+Este projeto demonstra o desenvolvimento de um modelo de banco de dados dimensional utilizando o **PostgreSQL** (via pgAdmin 4 / DBeaver). O cenário simula um ambiente real de Business Intelligence (BI) focado no controle e análise de vendas de produtos eletrônicos (consoles, smartphones e video games), integrando a performance de clientes, lojas e vendedores.
 
 ---
 
-## 📌 Star Schema
+## 📊 Paradigma e Modelo de Dados
 
-O modelo segue a arquitetura **Star Schema (Esquema Estrela)**, ideal para ferramentas de analíticas devido à sua simplicidade e performance em consultas com agregações.
+* **Modelo de Banco de Dados:** Dimensional (SQL)
+* **Arquitetura Lógica:** Star Schema (Esquema Estrela) com otimização para consultas analíticas.
+* **Isolamento de Escopo:** Concentração de métricas de negócio na tabela fato centralizada.
 
-![Star Schema](caminho/para/imagem.png)
+---
+
+## 📐 Arquitetura do Modelo (Star Schema)
+
+O modelo foi desenhado para simplificar e acelerar a extração de relatórios gerenciais, separando o contexto do negócio em tabelas de dimensões claras e uma fato central.
+
+![Star Schema](caminho/para/imagem.png)  
 *Diagrama gerado via pgAdmin ERD / DBeaver / dbdiagram.io.*
 
----
+### 🔹 Estrutura do Negócio
 
-## 📐 O Modelo
-
-### Tabela Fato (`vendas`)
-A tabela `vendas` é a **Fato** do modelo. Ela registra cada evento de venda individual e concentra as métricas quantificáveis (`valor_unitario`, `quantidade`, `valor_total`), além das chaves estrangeiras (*Foreign Keys*) que se conectam com as dimensões.
-
-### Tabelas de Dimensão (`cliente`, `produtos`, `lojas`, `vendedor`)
-São as **Dimensões** do modelo. Elas não guardam métricas, apenas atributos descritivos utilizados para filtrar, contextualizar e agrupar a fato (ex: vendas por estado do cliente, por tipo de produto, performance por loja ou por vendedor).
-
-### Dimensão Degenerada (`tipo_operacao`)
-A coluna `tipo_operacao` (compra, troca ou venda) está localizada diretamente na tabela fato e não possui uma tabela própria. Trata-se de uma **Dimensão Degenerada**: um atributo descritivo que vive dentro da fato por não possuir atributos adicionais suficientes que justifiquem a criação de uma tabela separada.
+* **Tabela Fato (`vendas`):** Registra cada evento de venda e concentra as métricas quantificáveis (`valor_unitario`, `quantidade`, `valor_total`), além das chaves estrangeiras (*Foreign Keys*) que apontam para as dimensões.
+* **Tabelas de Dimensão (`cliente`, `produtos`, `lojas`, `vendedor`):** Não guardam métricas. Armazenam exclusivamente atributos descritivos usados para filtrar, contextualizar e agrupar a fato (ex: vendas por estado, tipo de produto ou performance do vendedor).
+* **Dimensão Degenerada (`tipo_operacao`):** O atributo descritivo (compra, troca ou venda) vive diretamente dentro da tabela fato por não possuir atributos adicionais suficientes que justifiquem a criação de uma tabela própria separada.
 
 ---
 
-## 💻 Script SQL
+## 🛠️ Engenharia e Evolução de Schema (DDL)
 
-Abaixo está o script DDL para a criação da estrutura do banco de dados:
+Abaixo estão os scripts estruturados que demonstram a criação sequencial das entidades de dimensões e a consolidação da tabela fato central com suas amarrações de chaves estrangeiras:
 
 ```sql
--- Criação da Dimensão Cliente
+-- 1. Criação da Dimensão Cliente
 CREATE TABLE cliente (
     id_cliente INTEGER PRIMARY KEY,
     nome_cliente VARCHAR(100),
@@ -43,14 +41,14 @@ CREATE TABLE cliente (
     estado VARCHAR(2) -- Exemplo: "RJ" ou "SP"
 );
 
--- Criação da Dimensão Produtos
+-- 2. Criação da Dimensão Produtos
 CREATE TABLE produtos (
     id_produto INTEGER PRIMARY KEY,
     nome_produto VARCHAR(100),
     tipo_produto VARCHAR(50) -- Console, smartphone, video game
 );
 
--- Criação da Dimensão Lojas
+-- 3. Criação da Dimensão Lojas
 CREATE TABLE lojas (
     id_loja INTEGER PRIMARY KEY,
     nome_loja VARCHAR(100),
@@ -58,7 +56,7 @@ CREATE TABLE lojas (
     estado CHAR(2)
 );
 
--- Criação da Dimensão Vendedor
+-- 4. Criação da Dimensão Vendedor
 CREATE TABLE vendedor (
     id_vendedor INTEGER PRIMARY KEY,
     nome_vendedor VARCHAR(100),
@@ -66,7 +64,7 @@ CREATE TABLE vendedor (
     cidade VARCHAR(100)
 );
 
--- Criação da Tabela Fato Vendas
+-- 5. Criação da Tabela Fato Vendas
 CREATE TABLE vendas (
     id_venda BIGSERIAL PRIMARY KEY,
     id_cliente INTEGER NOT NULL REFERENCES cliente(id_cliente),
