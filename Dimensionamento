@@ -16,8 +16,8 @@ Este projeto demonstra o desenvolvimento de um modelo de banco de dados dimensio
 
 O modelo foi desenhado para simplificar e acelerar a extração de relatórios gerenciais, separando o contexto do negócio em tabelas de dimensões claras e uma fato central.
 
-![Star Schema](caminho/para/imagem.png)  
-*Diagrama gerado via pgAdmin ERD / DBeaver / dbdiagram.io.*
+![Star Schema](Starchema.pgerd.png)  
+*Diagrama gerado via pgAdmin ERD*
 
 ### 🔹 Estrutura do Negócio
 
