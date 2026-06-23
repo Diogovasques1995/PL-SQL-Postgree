@@ -1,0 +1,67 @@
+# Modelagem Dimensional - Vendas (PostgreSQL)
+
+Exercício de modelagem dimensional feito em PostgreSQL, simulando um cenário de vendas de produtos eletrônicos (consoles, smartphones, video games) com clientes, lojas e vendedores.
+
+## Star Schema
+
+> Imagem do diagrama aqui (gerado via pgAdmin ERD / DBeaver / dbdiagram.io)
+
+`![Star Schema](caminho/para/imagem.png)`
+
+## Modelo
+
+A tabela **vendas** é a fato do modelo: registra cada evento de venda e concentra as métricas (`valor_unitario`, `quantidade`, `valor_total`), além das chaves estrangeiras que apontam para cada dimensão.
+
+As tabelas **cliente**, **produtos**, **lojas** e **vendedor** são as dimensões: não guardam métricas, só atributos descritivos usados para filtrar e agrupar a fato (vendas por estado do cliente, por tipo de produto, por loja, por vendedor).
+
+A coluna `tipo_operacao` (compra, troca ou venda) fica direto na fato e não tem tabela própria — é uma dimensão degenerada, um atributo descritivo que vive dentro da fato por não ter atributos suficientes para justificar uma tabela separada.
+
+## Script SQL
+
+```sql
+create table cliente (
+    id_cliente integer primary key,
+    nome_cliente varchar(100),
+    email varchar(100),
+    cidade varchar(50),
+    estado varchar(2) -- estado exemplo "RJ" ou "SP"
+);
+
+create table produtos (
+    id_produto integer primary key,
+    nome_produto varchar(100),
+    tipo_produto varchar(50) -- console, smartphone, video game
+);
+
+create table lojas (
+    id_loja integer primary key,
+    nome_loja varchar(100),
+    cidade varchar(100),
+    estado char(2)
+);
+
+create table vendedor (
+    id_vendedor integer primary key,
+    nome_vendedor varchar(100),
+    nome_loja varchar(100),
+    cidade varchar(100)
+);
+
+create table vendas (
+    id_venda bigserial primary key,
+    id_cliente integer not null references cliente(id_cliente),
+    id_produto integer not null references produtos(id_produto),
+    id_loja integer not null references lojas(id_loja),
+    id_vendedor integer not null references vendedor(id_vendedor),
+    tipo_operacao varchar(20), -- compra, troca ou venda
+    valor_unitario numeric(10,2),
+    quantidade integer,
+    valor_total numeric(10,2)
+);
+```
+
+## Próximos passos
+
+- Popular as tabelas com dados de exemplo
+- Escrever consultas analíticas (JOINs, GROUP BY, agregações)
+- Gerar o diagrama do star schema e subir a imagem neste repositório
